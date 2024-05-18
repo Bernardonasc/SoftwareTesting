@@ -2,6 +2,9 @@
 import os
 import sys
 
+sys.setrecursionlimit(1500)
+
+
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myproject.settings")
     try:

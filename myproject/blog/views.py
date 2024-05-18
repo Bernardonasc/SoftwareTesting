@@ -1,10 +1,22 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 from .forms import PostForm
+from django.db.models import Q
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', {})
+
+def custom_500_view(request):
+    return render(request, '500.html', {})
 
 def home(request):
-    posts = Post.objects.all()
-    return render(request, 'blog/home.html', {'posts': posts})
+    query = request.GET.get('q')
+    order = request.GET.get('order', 'created_at')
+    if query:
+        posts = Post.objects.filter(title__icontains=query).order_by(order)
+    else:
+        posts = Post.objects.all().order_by(order)
+    return render(request, 'blog/home.html', {'posts': posts, 'query': query, 'order': order})
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)

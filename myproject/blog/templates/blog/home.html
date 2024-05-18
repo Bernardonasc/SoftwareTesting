@@ -1,17 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Home</title>
-</head>
-<body>
-    <h1>Posts</h1>
-    <ul>
+{% extends 'blog/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Posts</h1>
+        <form method="GET" class="form-inline">
+            <input type="text" name="q" class="form-control mr-2" placeholder="Search by title" value="{{ query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+    <div class="row">
         {% for post in posts %}
-        <li>
-            <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a> - {{ post.created_at }}
-        </li>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.content|truncatewords:20 }}</p>
+                        <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary">Read More</a>
+                        <p class="card-text mt-2"><small class="text-muted">Created at: {{ post.created_at }}</small></p>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
-    <a href="{% url 'post_create' %}">Create New Post</a>
-</body>
-</html>
+    </div>
+{% endblock %}
