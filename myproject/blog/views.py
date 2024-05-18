@@ -1,22 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post
+from .models import Post, Category
 from .forms import PostForm
+from django.core.paginator import Paginator
 from django.db.models import Q
-
-def custom_404_view(request, exception):
-    return render(request, '404.html', {})
-
-def custom_500_view(request):
-    return render(request, '500.html', {})
 
 def home(request):
     query = request.GET.get('q')
-    order = request.GET.get('order', 'created_at')
-    if query:
-        posts = Post.objects.filter(title__icontains=query).order_by(order)
-    else:
-        posts = Post.objects.all().order_by(order)
-    return render(request, 'blog/home.html', {'posts': posts, 'query': query, 'order': order})
+    posts = Post.objects.filter(title__icontains=query) if query else Post.objects.all()
+    paginator = Paginator(posts, 6)  # Mostra 6 posts por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'blog/home.html', {'posts': page_obj, 'query': query})
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -24,7 +18,7 @@ def post_detail(request, pk):
 
 def post_create(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('home')
@@ -35,10 +29,10 @@ def post_create(request):
 def post_update(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('post_detail', pk=post.pk)
+            return redirect('home')
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_form.html', {'form': form})
