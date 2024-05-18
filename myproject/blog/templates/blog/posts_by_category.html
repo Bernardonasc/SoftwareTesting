@@ -1,0 +1,42 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Posts in {{ category.name }}{% endblock %}
+
+{% block content %}
+    <div class="jumbotron text-center">
+        <div class="container">
+            <h1 class="display-4">Posts in {{ category.name }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        {% for post in posts %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <hr class="card-divider">
+                        <p class="card-text">{{ post.content|truncatewords:30|safe }}</p>
+                        <p class="card-text"><span class="badge badge-secondary">{{ post.category.name }}</span></p>
+                        <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary btn-sm">Read More</a> <!-- Adiciona a classe 'btn-sm' -->
+                        <p class="card-text mt-2"><small class="text-muted">Created at: {{ post.created_at }}</small></p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if posts.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Page {{ posts.number }} of {{ posts.paginator.num_pages }}</a>
+            </li>
+            {% if posts.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ posts.paginator.num_pages }}">Last</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endblock %}

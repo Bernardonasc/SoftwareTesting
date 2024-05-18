@@ -6,11 +6,23 @@ from django.db.models import Q
 
 def home(request):
     query = request.GET.get('q')
-    posts = Post.objects.filter(title__icontains=query) if query else Post.objects.all()
+    posts = Post.objects.all()
+    if query:
+        posts = posts.filter(title__icontains=query)
     paginator = Paginator(posts, 6)  # Mostra 6 posts por página
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'blog/home.html', {'posts': page_obj, 'query': query})
+    categories = Category.objects.all()
+    return render(request, 'blog/home.html', {'posts': page_obj, 'query': query, 'categories': categories})
+
+def posts_by_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    posts = Post.objects.filter(category=category)
+    paginator = Paginator(posts, 6)  # Mostra 6 posts por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    categories = Category.objects.all()
+    return render(request, 'blog/posts_by_category.html', {'posts': page_obj, 'category': category, 'categories': categories})
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
