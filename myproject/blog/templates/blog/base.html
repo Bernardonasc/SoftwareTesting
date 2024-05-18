@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}BlogApp{% endblock %}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
     <style>
         :root {
             --primary-color: #6d5b96;
@@ -19,21 +20,42 @@
         .navbar {
             margin-bottom: 20px;
             background-color: var(--dark-color); /* Navbar preta */
+            position: relative;
         }
         .navbar-brand, .nav-link {
             color: #ffffff !important;
+        }
+        .nav-link .fa {
+            margin-right: 5px;
+        }
+        .navbar::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100%;
         }
         .card {
             margin-bottom: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .btn-primary {
+        .btn-primary, .btn-custom {
             background-color: var(--primary-color);
             border: none;
+            border-radius: 5px;
         }
-        .btn-primary:hover {
+        .btn-primary:hover, .btn-custom:hover {
             background-color: var(--secondary-color);
+        }
+        .btn-custom-gray {
+            background-color: #6c757d; /* Cor cinza */
+            border: none;
+            border-radius: 5px;
+        }
+        .btn-custom-gray:hover {
+            background-color: #5a6268; /* Cor cinza escura */
         }
         .jumbotron {
             position: relative;
@@ -66,6 +88,26 @@
             position: relative;
             z-index: 2;
         }
+        .form-control {
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .category-field select {
+            width: auto; /* Ajustar a largura do campo category */
+            display: inline-block;
+        }
+        .d-flex.justify-content-between .btn {
+            width: auto; /* Ajustar a largura dos botões */
+        }
+        .card-divider {
+            border-top: 1px solid #e6e1f2;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -77,10 +119,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    <a class="nav-link" href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'post_create' %}">Create New Post</a>
+                    <a class="nav-link" href="{% url 'post_create' %}"><i class="fa fa-plus"></i> Create New Post</a>
                 </li>
             </ul>
         </div>
