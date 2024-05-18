@@ -6,7 +6,7 @@
     <div class="card">
         <div class="card-body">
             <h1 class="card-title">{{ post.title }}</h1>
-            <p class="card-text">{{ post.content }}</p>
+            <p class="card-text">{{ post.content|safe }}</p>
             <p><small>Created at: {{ post.created_at }}</small></p>
             <a href="{% url 'post_update' post.pk %}" class="btn btn-warning">Edit</a>
             <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger">Delete</a>
