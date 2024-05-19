@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BlogApp{% endblock %}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
+    <style>
+        :root {
+            --primary-color: #6d5b96;
+            --secondary-color: #8e82b6;
+            --highlight-color: #9b8dcf;
+            --light-color: #e6e1f2;
+            --dark-color: #343a40;
+        }
+        body {
+            background-color: #ffffff; /* Fundo branco */
+        }
+        .navbar {
+            margin-bottom: 20px;
+            background-color: var(--dark-color); /* Navbar preta */
+        }
+        .navbar-brand, .nav-link {
+            color: #ffffff !important;
+        }
+        .nav-link .fa {
+            margin-right: 5px;
+        }
+        .dropdown-toggle::after {
+            display: none; /* Remove o ícone de dropdown */
+        }
+        .card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary, .btn-custom {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 5px;
+        }
+        .btn-primary:hover, .btn-custom:hover {
+            background-color: var(--secondary-color);
+        }
+        .btn-custom-gray {
+            background-color: #6c757d; /* Cor cinza */
+            border: none;
+            border-radius: 5px;
+        }
+        .btn-custom-gray:hover {
+            background-color: #5a6268; /* Cor cinza escura */
+        }
+        .jumbotron {
+            position: relative;
+            overflow: hidden;
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 3rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .jumbotron::before, .jumbotron::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-repeat: no-repeat;
+            opacity: 0.2;
+        }
+        .jumbotron::before {
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+        }
+        .jumbotron::after {
+            background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 60%);
+            z-index: 1;
+        }
+        .jumbotron .container {
+            position: relative;
+            z-index: 2;
+        }
+        .form-control {
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .category-field select {
+            width: auto; /* Ajustar a largura do campo category */
+            display: inline-block;
+        }
+        .d-flex.justify-content-between .btn {
+            width: auto; /* Ajustar a largura dos botões */
+        }
+        .card-divider {
+            border-top: 1px solid #e6e1f2;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{% url 'home' %}">BlogApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-list"></i> Categories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="categoriesDropdown">
+                        {% for category in categories %}
+                            <a class="dropdown-item" href="{% url 'posts_by_category' category.id %}">{{ category.name }}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'post_create' %}"><i class="fa fa-plus"></i> Create New Post</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}"><i class="fa fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}"><i class="fa fa-sign-in-alt"></i> Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}"><i class="fa fa-user-plus"></i> Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">{{ post.title }}</h3>
+            <p class="card-text"><small class="text-muted">by {{ post.author.username }}</small></p>
+            <p class="card-text">{{ post.content|safe }}</p>
+            <p class="card-text"><span class="badge badge-secondary">{{ post.category.name }}</span></p>
+            <p class="card-text"><small class="text-muted">Created at: {{ post.created_at }}</small></p>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                {% if is_author %}
+                    <a href="{% url 'post_edit' post.pk %}" class="btn btn-warning btn-sm mr-2">
+                        <i class="fa fa-edit"></i> Edit
+                    </a>
+                    <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm mr-2">
+                        <i class="fa fa-trash"></i> Delete
+                    </a>
+                {% endif %}
+                <a href="{% url 'home' %}" class="btn btn-custom-gray btn-sm">Back to Home</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
