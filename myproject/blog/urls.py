@@ -1,11 +1,16 @@
+# blog/urls.py
+
 from django.urls import path
-from . import views
+from .views import home, post_create, post_edit, post_delete, register, loginPage, logoutUser, post_detail, posts_by_category
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('post/<int:pk>/', views.post_detail, name='post_detail'),
-    path('post/new/', views.post_create, name='post_create'),
-    path('post/<int:pk>/edit/', views.post_update, name='post_update'),
-    path('post/<int:pk>/delete/', views.post_delete, name='post_delete'),
-    path('category/<int:category_id>/', views.posts_by_category, name='posts_by_category'),
+    path('', home, name='home'),
+    path('post/new/', post_create, name='post_create'),
+    path('post/edit/<int:pk>/', post_edit, name='post_edit'),
+    path('post/delete/<int:pk>/', post_delete, name='post_delete'),
+    path('register/', register, name='register'),
+    path('login/', loginPage, name='login'),
+    path('logout/', logoutUser, name='logout'),
+    path('post/<int:pk>/', post_detail, name='post_detail'),
+    path('category/<int:category_id>/', posts_by_category, name='posts_by_category'),
 ]
