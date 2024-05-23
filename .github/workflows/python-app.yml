@@ -36,5 +36,5 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        export DJANGO_SETTINGS_MODULE = myproject.myproject.settings
+        export DJANGO_SETTINGS_MODULE=myproject.myproject.settings
         pytest
