@@ -54,3 +54,17 @@ def test_post_delete_GET(client, user, post):
     client.login(username='testuser', password='12345')
     response = client.get(reverse('post_delete', args=[post.id]))
     assert response.status_code == 200
+
+def test_logout_GET_is_redirected(client):
+    response = client.get(reverse('logout'))
+    assert response.status_code == 302
+
+def test_login_POST_is_redirected(client, user):
+    response = client.post(reverse('login'), {'username':
+                                                'testuser', 'password': '12345'})
+    assert response.status_code == 302
+
+def test_login_POST_goes_to_home(client, user):
+    response = client.post(reverse('login'), {'username':
+                                                'testuser', 'password': '12345'})
+    assert response.url == reverse('home')
