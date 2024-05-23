@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.test import Client
 from django.contrib.auth.models import User
 from blog.models import Post, Category
+from blog.views import CreateUserForm
 
 @pytest.fixture
 def client(db):
@@ -68,3 +69,18 @@ def test_login_POST_goes_to_home(client, user):
     response = client.post(reverse('login'), {'username':
                                                 'testuser', 'password': '12345'})
     assert response.url == reverse('home')
+
+def test_CreateUserForm_password_mismatch(transactional_db):
+    form = CreateUserForm(data={'username': 'testuser', 'email': 'test@example.com', 'password1': 'password123', 'password2': 'password321'})
+    assert not form.is_valid()
+    assert form.errors['password2'] == ["The two password fields didn’t match."]
+
+def test_CreateUserForm_short_password(transactional_db):
+    form = CreateUserForm(data={'username': 'testuser', 'email': 'test@example.com', 'password1': 'pwd', 'password2': 'pwd'})
+    assert not form.is_valid()
+    assert form.errors['password2'] == ['This password is too short. It must contain at least 8 characters.']
+
+def test_CreateUserForm_common_password(transactional_db):
+    form = CreateUserForm(data={'username': 'testuser', 'email': 'test@example.com', 'password1': 'password', 'password2': 'password'})
+    assert not form.is_valid()
+    assert form.errors['password2'] == ['This password is too common.']
