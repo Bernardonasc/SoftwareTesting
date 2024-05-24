@@ -1,4 +1,3 @@
-# tests/test_urls.py
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 from blog.views import home, post_create, post_edit, post_delete, register, loginPage, logoutUser, post_detail, posts_by_category

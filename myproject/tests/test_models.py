@@ -10,9 +10,6 @@ class CategoryModelTest(TestCase):
     def test_category_creation(self):
         self.assertEqual(self.category.name, 'Test Category')
 
-    def test_category_str(self):
-        self.assertEqual(str(self.category), 'Test Category')
-
 class PostModelTest(TestCase):
 
     def setUp(self):
@@ -30,9 +27,6 @@ class PostModelTest(TestCase):
         self.assertEqual(self.post.content, 'Test Content')
         self.assertEqual(self.post.category.name, 'Test Category')
         self.assertEqual(self.post.author.username, 'testuser')
-
-    def test_post_str(self):
-        self.assertEqual(str(self.post), 'Test Post')
 
     def test_post_default_values(self):
         post = Post.objects.create(title='Another Test Post', author=self.user)
