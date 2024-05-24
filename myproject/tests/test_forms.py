@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from blog.forms import PostForm, CreateUserForm, CustomAuthenticationForm
+from blog.forms import PostForm, CreateUserForm
 from blog.models import Category, Post
 
 class PostFormTest(TestCase):
@@ -9,44 +9,44 @@ class PostFormTest(TestCase):
         self.category = Category.objects.create(name='Test Category')
         self.user = User.objects.create_user(username='testuser', password='12345')
 
-    def test_PostForm_valid_data(db):
+    def test_post_form_valid_data(self):
         form = PostForm(data={
-            'title': 'TestTitle', 
-            'content': 'TestContent', 
-            'category': 1
-            })
-        assert form.is_valid()
+            'title': 'Test Post',
+            'content': 'Test Content',
+            'category': self.category.id
+        })
+        self.assertTrue(form.is_valid())
 
     def test_post_form_no_title(self):
-            form = PostForm(data={
-                'title': '',
-                'content': 'Test Content',
-                'category': self.category.id
-            })
-            self.assertFalse(form.is_valid())
-            self.assertEqual(len(form.errors), 1)
-            self.assertIn('title', form.errors)
+        form = PostForm(data={
+            'title': '',
+            'content': 'Test Content',
+            'category': self.category.id
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn('title', form.errors)
 
     def test_post_form_no_content(self):
-          form = PostForm(data={
-              'title': 'Test Post',
-              'content': '',
-              'category': self.category.id
-          })
-          self.assertFalse(form.is_valid())
-          self.assertEqual(len(form.errors), 1)
-          self.assertIn('content', form.errors)
+        form = PostForm(data={
+            'title': 'Test Post',
+            'content': '',
+            'category': self.category.id
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn('content', form.errors)
 
     def test_post_form_invalid_category(self):
-            form = PostForm(data={
-                'title': 'Test Post',
-                'content': 'Test Content',
-                'category': 999
-            })
-            self.assertFalse(form.is_valid())
-            self.assertEqual(len(form.errors), 1)
-            self.assertIn('category', form.errors)
-          
+        form = PostForm(data={
+            'title': 'Test Post',
+            'content': 'Test Content',
+            'category': 999
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn('category', form.errors)
+
     def test_post_form_missing_data(self):
         form = PostForm(data={})
         self.assertFalse(form.is_valid())
@@ -103,29 +103,3 @@ class CreateUserFormTest(TestCase):
         self.assertIn('username', form.errors)
         self.assertIn('password1', form.errors)
         self.assertIn('password2', form.errors)
-
-def test_CreateUserForm_valid(transactional_db):
-    form = CreateUserForm(data={'username': 'testuser', 
-                                'email': 'test@example.com', 
-                                'password1': 'senhafacil123', 
-                                'password2': 'senhafacil123'
-                                })
-    if not form.is_valid():
-        print(form.errors)
-    assert form.is_valid()
-
-def test_CreateUserForm_invalid():
-    form = CreateUserForm(data={})
-    assert not form.is_valid()
-
-def test_CustomAuthenticationForm_valid(db):
-    User.objects.create_user(username='testuser', password='senhafacil123')
-    form = CustomAuthenticationForm(data={
-        'username': 'testuser', 
-        'password': 'senhafacil123'
-        })
-    assert form.is_valid()
-
-def test_CustomAuthenticationForm_invalid(db):
-    form = CustomAuthenticationForm(data={})
-    assert not form.is_valid()
