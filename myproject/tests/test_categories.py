@@ -12,7 +12,7 @@ class CategoriesProcessorTest(TestCase):
         request = self.factory.get('/')
         context = categories_processor(request)
         self.assertIn('categories', context)
-        self.assertEqual(context['categories'].count(), 11) # Número inicial de categorias
+        self.assertEqual(context['categories'].count(), 11) # Número de categorias
 
     def test_multiple_categories(self):
         Category.objects.create(name='Another Category')
