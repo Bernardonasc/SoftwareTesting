@@ -19,7 +19,11 @@ def category(transactional_db):
 
 @pytest.fixture
 def post(transactional_db, user, category):
-    return Post.objects.create(title='TestPost', content='TestContent', author=user, category=category)
+    return Post.objects.create(
+        title='TestPost',
+        content='TestContent',
+        author=user, 
+        category=category)
 
 def test_home_GET(client):
     response = client.get(reverse('home'))
@@ -71,16 +75,31 @@ def test_login_POST_goes_to_home(client, user):
     assert response.url == reverse('home')
 
 def test_CreateUserForm_password_mismatch(transactional_db):
-    form = CreateUserForm(data={'username': 'testuser', 'email': 'test@example.com', 'password1': 'password123', 'password2': 'password321'})
+    form = CreateUserForm(data={
+        'username': 'testuser',
+        'email': 'test@example.com',
+        'password1': 'password123',
+        'password2': 'password321'
+    })
     assert not form.is_valid()
     assert form.errors['password2'] == ["The two password fields didn’t match."]
 
 def test_CreateUserForm_short_password(transactional_db):
-    form = CreateUserForm(data={'username': 'testuser', 'email': 'test@example.com', 'password1': 'pwd', 'password2': 'pwd'})
+    form = CreateUserForm(data={
+        'username': 'testuser',
+        'email': 'test@example.com',
+        'password1': 'pwd',
+        'password2': 'pwd'
+    })
     assert not form.is_valid()
     assert form.errors['password2'] == ['This password is too short. It must contain at least 8 characters.']
 
 def test_CreateUserForm_common_password(transactional_db):
-    form = CreateUserForm(data={'username': 'testuser', 'email': 'test@example.com', 'password1': 'password', 'password2': 'password'})
+    form = CreateUserForm(data={
+        'username': 'testuser', 
+        'email': 'test@example.com', 
+        'password1': 'password', 
+        'password2': 'password'
+        })
     assert not form.is_valid()
     assert form.errors['password2'] == ['This password is too common.']
