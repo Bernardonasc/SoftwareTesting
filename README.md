@@ -36,12 +36,12 @@ O sistema inclui as seguintes funcionalidades:
 - [Testando com Django](https://developer.mozilla.org/pt-BR/docs/Learn/Server-side/Django/Testing)
 
 # Execução
-Instalar as Dependências: 
+- Instalar as Dependências: 
   pip install -r requirements.txt
-Realizar as Migrações do Banco de Dados: 
+- Realizar as Migrações do Banco de Dados: 
   python manage.py makemigrations
   python manage.py migrate
-Iniciar o Servidor de Desenvolvimento:
+- Iniciar o Servidor de Desenvolvimento:
   python manage.py runserver
 
 ### Testes de Sistema 
