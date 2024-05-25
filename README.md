@@ -1,7 +1,8 @@
 # Integrantes
 
 - Bernardo do Nascimento Nunes
-- 
+- Samuel Brum Martins
+- Filipe Araújo
 
 # Explicação do Sistema
 
