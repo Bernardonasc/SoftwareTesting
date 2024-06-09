@@ -43,3 +43,7 @@ jobs:
       run: |
         python manage.py migrate
         python manage.py test
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
