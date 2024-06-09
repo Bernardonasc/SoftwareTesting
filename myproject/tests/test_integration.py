@@ -77,3 +77,31 @@ class IntegrationTests(TestCase):
         })
         self.assertEqual(login_response.status_code, 302) 
         self.assertTrue(User.objects.filter(username='newuser').exists())
+    
+    def test_view_posts_by_category(self):
+        category1 = Category.objects.create(name='Category 1')
+        category2 = Category.objects.create(name='Category 2')
+        
+        post1 = Post.objects.create(
+            title='Post in Category 1',
+            content='Content for post in Category 1',
+            category=category1,
+            author=self.user
+        )
+        post2 = Post.objects.create(
+            title='Post in Category 2',
+            content='Content for post in Category 2',
+            category=category2,
+            author=self.user
+        )
+        
+        response = self.client.get(reverse('posts_by_category', args=[category1.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Post in Category 1')
+        self.assertNotContains(response, 'Post in Category 2')
+        
+        response = self.client.get(reverse('posts_by_category', args=[category2.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Post in Category 2')
+        self.assertNotContains(response, 'Post in Category 1')
+
