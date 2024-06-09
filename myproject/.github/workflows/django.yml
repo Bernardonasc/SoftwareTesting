@@ -2,9 +2,9 @@ name: Django CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -38,12 +38,16 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install django psycopg2
-    - name: Run migrations and tests
+        pip install django psycopg2 coverage
+    - name: Run migrations and tests with coverage
       run: |
         python manage.py migrate
-        python manage.py test
-    - name: Upload coverage reports to Codecov
+        coverage run --source='.' manage.py test
+        coverage xml
+    - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4.0.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
